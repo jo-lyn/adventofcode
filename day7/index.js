@@ -101,21 +101,8 @@ const getHandStrength = (hand) => {
   return 1;
 };
 
-const cardStrengthMap = {
-  T: 10,
-  J: 1,
-  Q: 12,
-  K: 13,
-  A: 14,
-};
-
-const getCardStrength = (card) => {
-  if (isNaN(Number(card))) {
-    return cardStrengthMap[card];
-  } else {
-    return Number(card);
-  }
-};
+const CARD_STRENGTH = "J23456789TQKA";
+const getCardStrength = (card) => CARD_STRENGTH.indexOf(card);
 
 const transformHand = (hand) => {
   const cardCountMap = {};
@@ -145,10 +132,8 @@ const transformHand = (hand) => {
     if (count1 === count2) {
       const strength1 = getCardStrength(a[0]);
       const strength2 = getCardStrength(b[0]);
-      if (strength1 > strength2) {
-        return -1;
-      } else {
-        return 1;
+      if (strength1 !== strength2) {
+        return strength2 - strength1;
       }
     } else {
       return count2 - count1;
@@ -156,8 +141,6 @@ const transformHand = (hand) => {
   });
 
   const bestCard = tuples[0][0];
-  // console.log({ hand, bestCard, tuples });
-
   let result = [];
   for (const card of hand) {
     if (card === "J") {
@@ -174,17 +157,8 @@ const compareStrength = (hand1, hand2) => {
   const strength1 = getHandStrength(transformHand(hand1));
   const strength2 = getHandStrength(transformHand(hand2));
 
-  // console.log({
-  //   strength1,
-  //   strength2,
-  //   hand1: transformHand(hand1),
-  //   hand2: transformHand(hand2),
-  // });
-
-  if (strength1 < strength2) {
-    return -1;
-  } else if (strength1 > strength2) {
-    return 1;
+  if (strength1 !== strength2) {
+    return strength1 - strength2;
   } else {
     for (let i = 0; i < hand1.length; i++) {
       if (getCardStrength(hand1[i]) < getCardStrength(hand2[i])) {
