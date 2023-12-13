@@ -3,7 +3,7 @@ var fs = require("fs");
 let input = [];
 try {
   const data = fs
-    .readFileSync("in3.txt", "utf8")
+    .readFileSync("in.txt", "utf8")
     .split(/\r?\n/)
     .forEach(function (line) {
       input.push(line);
@@ -110,6 +110,29 @@ const part1 = () => {
   return max;
 };
 
-console.log("RES", part1());
-console.log(visited);
-console.log(map);
+let res = 0;
+const part2 = () => {
+  for (let y = 0; y < visited.length; y++) {
+    let enclosed = false;
+    for (let x = 0; x < visited[y].length; x++) {
+      const pipe = map[y][x];
+      // part of the loop
+      if (visited[y][x] === 0) {
+        if (["|", "F", "7", "S"].includes(pipe)) {
+          enclosed = !enclosed;
+        }
+      } else {
+        if (enclosed) {
+          visited[y][x] = "*";
+          res++;
+        }
+      }
+    }
+  }
+  return res;
+};
+
+console.log("Part 1: ", part1());
+console.log("Part 2: ", part2());
+// console.log(visited);
+// console.log(map);
