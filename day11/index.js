@@ -3,7 +3,7 @@ var fs = require("fs");
 let input = [];
 try {
   const data = fs
-    .readFileSync("in1.txt", "utf8")
+    .readFileSync("in.txt", "utf8")
     .split(/\r?\n/)
     .forEach(function (line) {
       input.push(line);
@@ -42,30 +42,36 @@ let galaxies = [];
 for (let i = 0; i < map.length; i++) {
   for (let j = 0; j < map[0].length; j++) {
     if (map[i][j] === "#") {
-      galaxies.push([i, j]);
+      galaxies.push([j, i]);
     }
   }
 }
 
-console.log({ galaxies });
+console.log({ galaxies, emptyColumns, emptyRows });
 
 const getNewPos = (pos) => {
   let x = pos[0];
   let y = pos[1];
+  const multiple = 1000000 - 1;
 
   for (let i = 0; i < emptyColumns.length; i++) {
-    // console.log({ x, zz: emptyColumns[i] });
     if (x < emptyColumns[i]) {
-      x += i;
+      x += i * multiple;
       break;
+    }
+    if (i === emptyColumns.length - 1) {
+      x += emptyColumns.length * multiple;
     }
   }
 
   for (let i = 0; i < emptyRows.length; i++) {
-    // console.log({ y, emptyRows });
+    // console.log({ i, y, z: emptyRows[i] });
     if (y < emptyRows[i]) {
-      y += i;
+      y += i * multiple;
       break;
+    }
+    if (i === emptyRows.length - 1) {
+      y += emptyRows.length * multiple;
     }
   }
   return [x, y];
@@ -80,9 +86,10 @@ const findShortestPath = (pos1, pos2) => {
 let sum = 0;
 for (let i = 0; i < galaxies.length; i++) {
   for (let j = i + 1; j < galaxies.length; j++) {
+    // console.log({ i, j });
     sum += findShortestPath(getNewPos(galaxies[i]), getNewPos(galaxies[j]));
   }
 }
 
-console.log(getNewPos([1, 7]));
+console.log(getNewPos([3, 0]));
 console.log({ sum });
