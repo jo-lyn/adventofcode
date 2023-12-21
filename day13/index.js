@@ -36,12 +36,22 @@ const transpose = (arr) => {
 
 // index = index of line of reflection
 const hasReflection = (pattern, index) => {
+  let smudge = { x: -1, y: -1 };
   for (let i = index - 1, j = index; i >= 0 && j < pattern.length; i--, j++) {
-    if (pattern[i] !== pattern[j]) {
-      return false;
+    const pi = pattern[i];
+    const pj = pattern[j];
+    for (let k = 0; k < pi.length; k++) {
+      if (pi[k] !== pj[k]) {
+        if (smudge.x < 0) {
+          smudge = { x: k, y: i };
+        } else {
+          // already fixed smudge, no reflection
+          return false;
+        }
+      }
     }
   }
-  return true;
+  return smudge.x >= 0;
 };
 
 let sum = 0;
