@@ -13,29 +13,33 @@ try {
 }
 
 let load = 0;
-for (let col = 0; col < input[0].length; col++) {
-  // index = row num; value = number of rounded-rocks
-  let rounds = Array(input.length).fill(0);
-  // positions of cubed-rocks
-  let cubes = [];
+for (let c = 0; c < input[0].length; c++) {
+  // index = row num; value = 1 if there is rock, 0 if no rock
+  // add dummy idx 0 for easier calculation
+  let rocks = Array(input.length + 1).fill(0);
+  let currCubeRow = -1;
+  let currRockRow = input[0].length;
 
-  for (let row = 0; row < input.length; row++) {
-    const n = input[row][col];
+  for (let r = 0; r < input.length; r++) {
+    const n = input[r][c];
+    const row = input[0].length - r;
     if (n === "#") {
-      cubes.push({ row, col });
+      currCubeRow = row;
     } else if (n === "O") {
-      rounds[cubes.length]++;
+      if (currCubeRow >= 0) {
+        currRockRow = currCubeRow - 1;
+        currCubeRow = -1;
+      }
+      //   console.log({ currCubeRow, currRockRow, row });
+      rocks[currRockRow] = 1;
+      currRockRow--;
     }
   }
 
-  if (col === 5) {
-    console.log(rounds, cubes);
-  }
-
   // calculate load
-  //   for (let i = 0; i < rounds.length; i++) {
-  //     const d =  input.length - cubes[i - 1].row;
-  //     console.log(d);
-  //     load += d * rounds[i];
-  //   }
+  for (let i = 0; i < rocks.length; i++) {
+    load += i * rocks[i];
+  }
 }
+
+console.log(load);
