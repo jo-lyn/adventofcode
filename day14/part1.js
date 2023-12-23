@@ -28,14 +28,10 @@ for (let col = 0; col < input[0].length; col++) {
     }
   }
 
-  if (col === 5) {
-    console.log(rounds, cubes);
-  }
-
   // calculate load
-  //   for (let i = 0; i < rounds.length; i++) {
-  //     const d =  input.length - cubes[i - 1].row;
-  //     console.log(d);
-  //     load += d * rounds[i];
-  //   }
+  for (let i = 0; i < rounds.length; i++) {
+    const d = input.length - cubes[i - 1].row;
+    console.log(d);
+    load += d * rounds[i];
+  }
 }
